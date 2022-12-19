@@ -4,6 +4,10 @@ import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import axios from "axios";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
 
 
 import 'leaflet/dist/leaflet.css';
@@ -24,10 +28,13 @@ function App() {
     L.Icon.Default.mergeOptions({
     iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
     iconUrl: require("leaflet/dist/images/marker-icon.png"),
-    shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+    shadowUrl: require("leaflet/dist/images/marker-shadow.png")//,
+   // window: scrollTo({top: 0, left: 0, behavior: 'smooth'})
     });
     do_download();
     }, []);
+
+
 
   function do_download() {
     // TODO: Parametrisieren
@@ -49,7 +56,32 @@ function App() {
 
   return (
     <>
-      <h1>Geodetic Line</h1>
+      <AppBar position="sticky" color="primary">
+            <Toolbar>
+                <Typography variant='h4'>Geodetic Line</Typography>
+                
+            </Toolbar>
+            <  iconbutton
+        onClick={() => {
+          window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+        }}
+        style={{
+        position: 'fixed',
+          bottom: 0,
+          left: 10,         
+          padding: '1rem 3rem',
+          
+          fontSize: '20px',
+          backgroundColor: '#93acad',
+          color: '#fff',
+          textAlign: 'center',
+        }}
+      >
+        top
+      </iconbutton>
+            </AppBar>
+            <br/>
+           
 
       <Grid container spacing={2}>
           <Grid container item xs={6} spacing={-8}>
@@ -75,13 +107,15 @@ function App() {
             <Grid item xs={4}>
               <TextField type = "number" label="Endpunkt Lon" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
             </Grid>
-          </Grid>
+            </Grid>
 
 
-          <Grid item xs={12}>
+          <Grid item xs={0}>
           <Button variant="contained" onClick={() => { do_download() }}>
           Convert
         </Button><p/>
+        
+        
           </Grid>
         </Grid>
    
@@ -104,8 +138,10 @@ function App() {
 
                   </MapContainer>
                 </>}
-  
+       
       </>
+
+      
   );
 }
 
