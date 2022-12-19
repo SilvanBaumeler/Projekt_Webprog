@@ -89,10 +89,10 @@ function App() {
                 <h3>Startpunkt:</h3>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Startpunkt Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
+              <TextField type = "number" label="Startpunkt Lat" variant="outlined" onChange={(e) => startLat(e.target.value)} />
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Startpunkt Lon" variant="outlined" onChange={(e) => setStartLon(e.target.value)}/>
+              <TextField type = "number" label="Startpunkt Lon" variant="outlined" onChange={(e) => startLon(e.target.value)}/>
             </Grid>
           </Grid>
 
@@ -102,17 +102,17 @@ function App() {
                 <h3>Endpunkt:</h3>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Endpunkt Lat" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
+              <TextField type = "number" label="Endpunkt Lat" variant="outlined" onChange={(e) => endLat(e.target.value)}/>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Endpunkt Lon" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
+              <TextField type = "number" label="Endpunkt Lon" variant="outlined" onChange={(e) => endLon(e.target.value)}/>
             </Grid>
             </Grid>
 
 
           <Grid item xs={0}>
           <Button variant="contained" onClick={() => { do_download() }}>
-          Convert
+          Berechnen
         </Button><p/>
         
         
