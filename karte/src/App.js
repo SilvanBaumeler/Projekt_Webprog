@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import axios from "axios";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import 'leaflet/dist/leaflet.css';
-import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Box} from '@mui/material';
 
 function App() {
   const [data, setData] = useState(null);
@@ -16,7 +16,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // const [pkt, setPkt] = useState(100)
-  const geoJsonLayer = useRef(null);
 
 
     function reload() {
@@ -50,21 +49,12 @@ function App() {
     });
     }, []);
 
-
-  useEffect(() => {
-   if(geoJsonLayer.current) {
-      geoJsonLayer.current.clearLayers().addData(data)
-    }
-  }, [data]);
-
   return (
     <>
-    <AppBar position="sticky" color="primary">
-            <Toolbar>
-                <Typography variant='h4'>Geodetic Line</Typography>
-                
-            </Toolbar>
-            <IconButton
+   <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+        <IconButton
           onClick={() => {
           window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         }}
@@ -79,11 +69,27 @@ function App() {
           color: '#fff',
           textAlign: 'center',
         }}
-      >
-        top
-      </IconButton>
-            </AppBar>
-            <br/>
+         >
+         top
+        </IconButton>
+
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+          </IconButton>
+          
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Geodätische Linie
+          </Typography>
+          <Button color="inherit" href="http://www.in-dubio-pro-geo.de/?file=guide/gdesic#:~:text=Es%20gibt%20im%20Wesentlichen%206,Breite%20%CF%86Q%20von%20Q">Info Berechnung</Button>
+          <Button color="inherit" href="https://www.fhnw.ch/de/die-fhnw/hochschulen/architektur-bau-geomatik/institute/institut-geomatik">Über uns</Button>
+        </Toolbar>
+      </AppBar>
+    </Box><p/>
 
     <Grid container spacing={2}>
           <Grid container item xs={6} spacing={-8}>
@@ -120,7 +126,7 @@ function App() {
         </Grid>
 
         {!data && <>
-        
+
           <MapContainer center={[47.5349, 7.6416]} zoom={2} scrollWheelZoom={true}
           style={{ height: "600px", width: "100%" }} >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
