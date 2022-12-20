@@ -19,22 +19,6 @@ function App() {
   const geoJsonLayer = useRef(null);
 
 
-  useEffect(() => {
-    const L = require("leaflet");
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-      iconUrl: require("leaflet/dist/images/marker-icon.png"),
-      shadowUrl: require("leaflet/dist/images/marker-shadow.png")
-    });
-    }, []);
-
-  useEffect(() => {
-   if(geoJsonLayer.current) {
-      geoJsonLayer.current.clearLayers().addData(data)
-    }
-  }, [data]);
-
     function reload() {
       window.location.reload();
     }
@@ -56,10 +40,26 @@ function App() {
       });
   }
 
+  useEffect(() => {
+    const L = require("leaflet");
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+    iconUrl: require("leaflet/dist/images/marker-icon.png"),
+    shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+    });
+    }, []);
+
+
+  useEffect(() => {
+   if(geoJsonLayer.current) {
+      geoJsonLayer.current.clearLayers().addData(data)
+    }
+  }, [data]);
 
   return (
     <>
-       <AppBar position="sticky" color="primary">
+    <AppBar position="sticky" color="primary">
             <Toolbar>
                 <Typography variant='h4'>Geodetic Line</Typography>
                 
@@ -85,28 +85,28 @@ function App() {
             </AppBar>
             <br/>
 
-      <Grid container spacing={2}>
+    <Grid container spacing={2}>
           <Grid container item xs={6} spacing={-8}>
             <Grid item xs={2}>
-                <h3>Startpunkt:</h3>
+                <h4>Startpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Startpunkt Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
+              <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Startpunkt Lon" variant="outlined" onChange={(e) => setStartLon(e.target.value)} />
+              <TextField type = "number" label="Lon" variant="outlined" onChange={(e) => setStartLon(e.target.value)} />
             </Grid>
           </Grid>
 
           <Grid container item xs={6} spacing={-8}>
             <Grid item xs={2}>
-                <h3>Endpunkt:</h3>
+                <h4>Endpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Endpunkt Lat" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
+              <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Endpunkt Lon" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
+              <TextField type = "number" label="Lon" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
             </Grid>
           </Grid>
 
@@ -115,9 +115,23 @@ function App() {
             <Button variant="contained" onClick = { () => {do_download()}}>
             Convert
             </Button><p/>
-            <Button variant="contained" onClick={() => { reload() }}>Reset</Button>
+            <Button variant="contained" onClick={() => { reload() }}>Reset</Button><p/>
           </Grid>
         </Grid>
+
+        {!data && <>
+        
+          <MapContainer center={[47.5349, 7.6416]} zoom={2} scrollWheelZoom={true}
+          style={{ height: "600px", width: "100%" }} >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
+                  
+           <GeoJSON data={data} style={{ weight: 8, opacity: '50%', color: 'blue'}}/>
+
+          </MapContainer>
+          </>
+        }
+      
 
       {loading && <>
                      <div>API Aufruf, bitte warten!</div><br/>
