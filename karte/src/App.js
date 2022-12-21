@@ -21,7 +21,7 @@ function App() {
 
   function do_download() {
     console.log(startLon, startLat)
-    var url = `https://vm1.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=100`;
+    var url = `https://vm9.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=100`;
    
     setLoading(true);
     axios
@@ -65,24 +65,25 @@ function App() {
    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-        <IconButton
+        <Button  
           onClick={() => {
           window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         }}
         style={{
-        position: 'fixed',
+          zIndex: 1000,
+          position: 'fixed',
           bottom: 0,
           left: 10,         
           padding: '1rem 3rem',
           
-          fontSize: '20px',
+          fontSize: '10px',
           backgroundColor: '#93acad',
           color: '#fff',
           textAlign: 'center',
         }}
          >
          top
-        </IconButton>
+        </Button>
 
           <IconButton
             size="large"
@@ -94,7 +95,7 @@ function App() {
           </IconButton>
           
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Geodätische Linie
+            Geodätische Linie 
           </Typography>
           <Button color="inherit" href="http://www.in-dubio-pro-geo.de/?file=guide/gdesic#:~:text=Es%20gibt%20im%20Wesentlichen%206,Breite%20%CF%86Q%20von%20Q">Info Berechnung</Button>
           <Button color="inherit" href="https://www.fhnw.ch/de/die-fhnw/hochschulen/architektur-bau-geomatik/institute/institut-geomatik">Über uns</Button>
@@ -105,7 +106,7 @@ function App() {
     <Grid container spacing={2}>
           <Grid container item xs={12} md= {6} spacing={-8}>
             <Grid item xs={2.5}>
-                <h4>Startpunkt: hier</h4>
+                <h4>Startpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
               <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
@@ -138,7 +139,7 @@ function App() {
         {!data && <>
 
           <MapContainer center={[47.5349, 7.6416]} zoom={2} scrollWheelZoom={true}
-          style={{ height: "200px", width: "100%" }} >
+          style={{ height: "600px", width: "100%" }} >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
                   
