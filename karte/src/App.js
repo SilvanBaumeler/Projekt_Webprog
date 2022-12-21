@@ -10,18 +10,18 @@ import { AppBar, Toolbar, Typography, IconButton, Box} from '@mui/material';
 function App() {
   const [mapKey, setMapKey] = useState(0);
   const [data, setData] = useState(null);
-  const [startLat, setStartLat] = useState(1)
-  const [startLon, setStartLon] = useState(1)
-  const [endLat, setEndLat] = useState(1)
-  const [endLon, setEndLon] = useState(1)
+  const [startLat, setStartLat] = useState(null)
+  const [startLon, setStartLon] = useState(null)
+  const [endLat, setEndLat] = useState(null)
+  const [endLon, setEndLon] = useState(null)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const [pkt, setPkt] = useState(100)
+  const [pkt, setPkt] = useState(100)
   
 
   function do_download() {
     console.log(startLon, startLat)
-    var url = `https://vm9.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=100`;
+    var url = `https://vm9.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=${pkt}`;
    
     setLoading(true);
     axios
@@ -60,6 +60,25 @@ function App() {
     });
     }, []);
 
+    if (startLat > 90 || endLat > 90) {
+      alert("Breitengrade dürfen mindestens -90 und maximum 90 sein.");
+    }
+
+    if (startLon > 180 || endLon > 180) {
+      alert("Längengrade dürfen mindestens -180 und maximum 180 sein.");
+    }
+
+    
+    if (startLat !== null && endLat !== null && startLon !== null && endLon !== null) {
+      if (startLat === endLat && startLon === endLon){
+        alert("Start und Endpunkt dürfen nicht gleich sein")
+      }}
+
+    if (pkt === 2 || pkt === 1) {
+      alert("Es müssen mehr als 2 Stützpunkte gewählt werden")
+    }
+  
+
   return (
     <>
    <Box sx={{ flexGrow: 1 }}>
@@ -70,10 +89,10 @@ function App() {
           window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         }}
         style={{
-          zIndex: 1000,
+          zIndex: 10000,
           position: 'fixed',
           bottom: 0,
-          left: 10,         
+          right: 10,      
           padding: '1rem 3rem',
           
           fontSize: '10px',
@@ -94,7 +113,7 @@ function App() {
           >
           </IconButton>
           
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1}}>
             Geodätische Linie 
           </Typography>
           <Button color="inherit" href="http://www.in-dubio-pro-geo.de/?file=guide/gdesic#:~:text=Es%20gibt%20im%20Wesentlichen%206,Breite%20%CF%86Q%20von%20Q">Info Berechnung</Button>
@@ -106,7 +125,7 @@ function App() {
     <Grid container spacing={2}>
           <Grid container item xs={12} md= {6} spacing={-8}>
             <Grid item xs={2.5}>
-                <h4>Startpunkt:</h4>
+                <h4 style={{ fontFamily: "Roboto"}}>Startpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
               <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
@@ -118,7 +137,7 @@ function App() {
 
           <Grid container item xs={12} md={6} spacing={-8}>
             <Grid item xs={2.5}>
-                <h4>Endpunkt:</h4>
+                <h4 style={{ fontFamily: "Roboto"}}>Endpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
               <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
@@ -128,13 +147,25 @@ function App() {
             </Grid>
           </Grid>
 
+          <Grid container item xs={12} md={6} spacing={-8}>
+              <Grid item xs={2.5}>
+                <h4 style={{ fontFamily: "Roboto"}}>Stützpunkte*:</h4>
+              </Grid>
+              <Grid item xs={4}>
+                <TextField type = "number" label="Stützpunkte" variant="outlined" onChange={(e) => setPkt(e.target.value)}/>
+              </Grid><p/>
+            </Grid>
+
 
           <Grid item xs={12}>
             <Button variant="contained" onClick = { () => {do_download()}}>
             Berechnen
             </Button><p/>
           </Grid>
-        </Grid>
+
+          
+      </Grid>
+
 
         {!data && <>
 
@@ -168,6 +199,18 @@ function App() {
            <GeoJSON key={mapKey} data={data} style={{ weight: 8, opacity: '50%', color: 'blue'}}/>
           </MapContainer>
                 </>}
+
+      <Grid container item xs = {6} >
+        <p style={{ fontFamily: "Roboto", fontSize: "10px" }}>
+            <b >Stützpunkte*:</b> Die Geodätische Linie macht eine bogenförmige Bewegung. Damit Koordinaten auf der Linie berechnet werden benötigen wir
+            Stützpunkte, welche die Linie unterteilen. Die Stützpunkte geben an in wie viele Strecken der Bogen unterteilt wird. Die Angabe zählt Anfangspunkt
+            und Endpunkt mit. Die Anzahl 0, 1, 2 können nicht eingegeben werden.
+        </p>
+      </Grid>
+              
+      <Grid item xs = {12} >
+        <p style={{ fontFamily: "Roboto"}}>Erstellt von Stefan Koch, Matteo Ferrari, Silvan Baumeler / Geomatikstudenten 3. Semester / 23.12.2022</p>
+      </Grid>
   
       </>
   );
