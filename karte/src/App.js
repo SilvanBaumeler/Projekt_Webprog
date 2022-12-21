@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import { AppBar, Toolbar, Typography, IconButton, Box} from '@mui/material';
 
 function App() {
+  const [mapKey, setMapKey] = useState(0);
   const [data, setData] = useState(null);
   const [startLat, setStartLat] = useState(1)
   const [startLon, setStartLon] = useState(1)
@@ -16,20 +17,25 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // const [pkt, setPkt] = useState(100)
-
-
-    function reload() {
-      window.location.reload();
-    }
+  
 
   function do_download() {
+    console.log(startLon, startLat)
     var url = `https://vm1.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=100`;
    
     setLoading(true);
     axios
       .get(url)
       .then((response) => {
-        setData(response.data);
+        updateData(response.data)
+        setData(response.data);  
+        const updateKey = ()=>{
+          const oldKey = mapKey
+          const newKey = oldKey + 1
+          setMapKey(newKey)
+          }
+        updateKey()
+        console.log("mapkey",mapKey)
       })
       .catch((err) => {
         setError(err);
@@ -38,8 +44,13 @@ function App() {
         setLoading(false);
       });
   }
+  const updateData = (data)=> {
+    setData(data)
+  }
+
 
   useEffect(() => {
+    console.log("useeffect aufgerufen")
     const L = require("leaflet");
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -92,9 +103,9 @@ function App() {
     </Box><p/>
 
     <Grid container spacing={2}>
-          <Grid container item xs={6} spacing={-8}>
-            <Grid item xs={2}>
-                <h4>Startpunkt:</h4>
+          <Grid container item xs={12} md= {6} spacing={-8}>
+            <Grid item xs={2.5}>
+                <h4>Startpunkt: hier</h4>
             </Grid>
             <Grid item xs={4}>
               <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
@@ -104,8 +115,8 @@ function App() {
             </Grid>
           </Grid>
 
-          <Grid container item xs={6} spacing={-8}>
-            <Grid item xs={2}>
+          <Grid container item xs={12} md={6} spacing={-8}>
+            <Grid item xs={2.5}>
                 <h4>Endpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
@@ -119,21 +130,20 @@ function App() {
 
           <Grid item xs={12}>
             <Button variant="contained" onClick = { () => {do_download()}}>
-            Convert
+            Berechnen
             </Button><p/>
-            <Button variant="contained" onClick={() => { reload() }}>Reset</Button><p/>
           </Grid>
         </Grid>
 
         {!data && <>
 
           <MapContainer center={[47.5349, 7.6416]} zoom={2} scrollWheelZoom={true}
-          style={{ height: "600px", width: "100%" }} >
+          style={{ height: "200px", width: "100%" }} >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
                   
            <GeoJSON data={data} style={{ weight: 8, opacity: '50%', color: 'blue'}}/>
-
+            
           </MapContainer>
           </>
         }
@@ -154,8 +164,7 @@ function App() {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
                   
-           <GeoJSON data={data} style={{ weight: 8, opacity: '50%', color: 'blue'}}/>
-
+           <GeoJSON key={mapKey} data={data} style={{ weight: 8, opacity: '50%', color: 'blue'}}/>
           </MapContainer>
                 </>}
   
