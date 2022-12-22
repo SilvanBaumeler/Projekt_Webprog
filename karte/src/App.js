@@ -5,7 +5,7 @@ import axios from "axios";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import 'leaflet/dist/leaflet.css';
-import { AppBar, Toolbar, Typography, IconButton, Box} from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, BottomNavigation} from '@mui/material';
 
 function App() {
   const [mapKey, setMapKey] = useState(0);
@@ -20,7 +20,6 @@ function App() {
   
 
   function do_download() {
-    console.log(startLon, startLat)
     var url = `https://vm9.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=${pkt}`;
    
     setLoading(true);
@@ -74,10 +73,6 @@ function App() {
         alert("Start und Endpunkt dürfen nicht gleich sein")
       }}
 
-    if (pkt === 2 || pkt === 1) {
-      alert("Es müssen mehr als 2 Stützpunkte gewählt werden")
-    }
-  
 
   return (
     <>
@@ -102,17 +97,7 @@ function App() {
         }}
          >
          top
-        </Button>
-
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-          </IconButton>
-          
+        </Button>       
           <Typography variant="h6" component="div" sx={{ flexGrow: 1}}>
             Geodätische Linie 
           </Typography>
@@ -128,10 +113,10 @@ function App() {
                 <h4 style={{ fontFamily: "Roboto"}}>Startpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
+              <TextField type = "number" label="Breitengrad" variant="outlined" onChange={(e) => setStartLat(e.target.value)} />
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Lon" variant="outlined" onChange={(e) => setStartLon(e.target.value)} />
+              <TextField type = "number" label="Längengrad" variant="outlined" onChange={(e) => setStartLon(e.target.value)} />
             </Grid>
           </Grid>
 
@@ -140,19 +125,19 @@ function App() {
                 <h4 style={{ fontFamily: "Roboto"}}>Endpunkt:</h4>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Lat" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
+              <TextField type = "number" label="Breitengrad" variant="outlined" onChange={(e) => setEndLat(e.target.value)}/>
             </Grid>
             <Grid item xs={4}>
-              <TextField type = "number" label="Lon" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
+              <TextField type = "number" label="Längengrad" variant="outlined" onChange={(e) => setEndLon(e.target.value)}/>
             </Grid>
           </Grid>
 
           <Grid container item xs={12} md={6} spacing={-8}>
               <Grid item xs={2.5}>
-                <h4 style={{ fontFamily: "Roboto"}}>Stützpunkte*:</h4>
+                <h4 style={{ fontFamily: "Roboto"}}>Stützpunkte:</h4>
               </Grid>
               <Grid item xs={4}>
-                <TextField type = "number" label="Stützpunkte" variant="outlined" onChange={(e) => setPkt(e.target.value)}/>
+                <TextField type = "number" label="Stützpunkte*" variant="outlined" onChange={(e) => setPkt(e.target.value)}/>
               </Grid><p/>
             </Grid>
 
@@ -200,17 +185,18 @@ function App() {
           </MapContainer>
                 </>}
 
-      <Grid container item xs = {6} >
-        <p style={{ fontFamily: "Roboto", fontSize: "10px" }}>
-            <b >Stützpunkte*:</b> Die Geodätische Linie macht eine bogenförmige Bewegung. Damit Koordinaten auf der Linie berechnet werden benötigen wir
+      <Grid container item xs = {12} >
+        <p style={{ fontFamily: "Roboto"}}>
+            <b >*Stützpunkte:</b> Die Geodätische Linie macht eine bogenförmige Bewegung. Damit Koordinaten auf der Linie berechnet werden benötigen wir
             Stützpunkte, welche die Linie unterteilen. Die Stützpunkte geben an in wie viele Strecken der Bogen unterteilt wird. Die Angabe zählt Anfangspunkt
-            und Endpunkt mit. Die Anzahl 0, 1, 2 können nicht eingegeben werden.
+            und Endpunkt mit. Die Anzahl 0, 1, 2 können nicht eingegeben werden. Wenn kein Wert gesetzt wird, wird standardmässig 100 verwendet
         </p>
       </Grid>
-              
+      <BottomNavigation>      
       <Grid item xs = {12} >
-        <p style={{ fontFamily: "Roboto"}}>Erstellt von Stefan Koch, Matteo Ferrari, Silvan Baumeler / Geomatikstudenten 3. Semester / 23.12.2022</p>
+        <p style={{ fontFamily: "Roboto", fontSize: "15px"}}>Erstellt von Stefan Koch, Matteo Ferrari, Silvan Baumeler / Geomatikstudenten 3. Semester / FHNW / 23.12.2022</p>
       </Grid>
+      </BottomNavigation> 
   
       </>
   );
