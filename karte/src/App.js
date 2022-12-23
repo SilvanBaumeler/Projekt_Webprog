@@ -20,8 +20,14 @@ function App() {
   
 
   function do_download() {
+     if (pkt < 3) {
+      // console.log(pkt)
+      alert("Es müssen mehr als 2 Stützpunkte gewählt werden")
+      return
+    }
+
     var url = `https://vm9.sourcelab.ch/geodetic/line?startlat=${startLat}&startlng=${startLon}&endlat=${endLat}&endlng=${endLon}&pts=${pkt}`;
-   
+
     setLoading(true);
     axios
       .get(url)
@@ -59,6 +65,7 @@ function App() {
     });
     }, []);
 
+    
     if (startLat > 90 || endLat > 90) {
       alert("Breitengrade dürfen mindestens -90 und maximum 90 sein.");
     }
@@ -72,6 +79,8 @@ function App() {
       if (startLat === endLat && startLon === endLon){
         alert("Start und Endpunkt dürfen nicht gleich sein")
       }}
+
+    
 
 
   return (
